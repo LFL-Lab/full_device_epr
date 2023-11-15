@@ -7,7 +7,7 @@ from qiskit_metal import draw, Dict, designs, MetalGUI
 from qiskit_metal.toolbox_metal import math_and_overrides
 from qiskit_metal.qlibrary.core import QComponent
 import qiskit_metal as metal
-# from just_claw import TransmonClaw
+from just_claw import TransmonClaw
 from qiskit_metal.qlibrary.terminations.launchpad_wb import LaunchpadWirebond
 from qiskit_metal.qlibrary.terminations.short_to_ground import ShortToGround
 from qiskit_metal.qlibrary.tlines.straight_path import RouteStraight
@@ -230,41 +230,11 @@ def add_ground_strip_and_mesh(modeler, coupler, mesh_lengths):
     for mesh_name, mesh_info in mesh_lengths.items():
         modeler.mesh_length(mesh_name, mesh_info['objects'], MaxLength=mesh_info['MaxLength'])
 
-# def add_cplr_claw_ground_strip_and_mesh(modeler, coupler, mesh_lengths):
-#     """
-#     Draw the rectangle in the Ansys modeler, update the model, and set the mesh based on the input dictionary.
-
-#     :param modeler: The modeler object.
-#     :param center: The center coordinates tuple.
-#     :param dimensions: The dimensions tuple.
-#     :param coupler: The coupler object.
-#     :param cpw: The cpw object.
-#     :param claw: The claw object.
-#     :param mesh_lengths: Dictionary containing mesh names, associated objects, and MaxLength values.
-#     """
-#     bounds = coupler.qgeometry_bounds()
-#     bbox = {'min_x': bounds[0], 'max_x': bounds[2], 'min_y': bounds[1], 'max_y': bounds[3]}
-#     center, dimensions = calculate_center_and_dimensions(bbox)
-#     gs = modeler.draw_rect_center(
-#         [coord * 1e-3 for coord in center],
-#         x_size=dimensions[0] * 1e-3,
-#         y_size=dimensions[1] * 1e-3,
-#         name='ground_strip'
-#     )
-
-#     modeler.intersect(["ground_strip", "ground_main_plane"], True)
-#     modeler.subtract("ground_main_plane", ["ground_strip"], True)
-#     modeler.assign_perfect_E(["ground_strip"])
-#     mesh_lengths.update({'mesh_ground_strip': {"objects": ["ground_strip"], "MaxLength": '4um'}})
-
-#     for mesh_name, mesh_info in mesh_lengths.items():
-#         modeler.mesh_length(mesh_name, mesh_info['objects'], MaxLength=mesh_info['MaxLength'])
-
-# def create_claw(opts, cpw_length, design):
-#     opts["orientation"] = "-90"
-#     opts["pos_x"] = "-1500um" if cpw_length > 2500 else "-1000um"
-#     claw = TransmonClaw(design, 'claw', options=opts)
-#     return claw
+def create_claw(opts, cpw_length, design):
+    opts["orientation"] = "-90"
+    opts["pos_x"] = "-1500um" if cpw_length > 2500 else "-1000um"
+    claw = TransmonClaw(design, 'claw', options=opts)
+    return claw
 
 def create_coupler(opts, design):
     opts["orientation"] = "-90"
