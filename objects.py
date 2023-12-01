@@ -37,13 +37,15 @@ def CLT_epr_sweep(design, sweep_opts, filename):
 
         epra, hfss = start_simulation(design, config)
         setup = set_simulation_hyperparameters(epra, config)
-        epra.sim.renderer.options.max_mesh_length_port = '4um'
+        epra.sim.renderer.options.max_mesh_length_port = '7um'
 
         render_simulation_with_ports(epra, config.design_name, setup.vars, coupler)
         modeler = hfss.pinfo.design.modeler
 
-        mesh_lengths = {'mesh1': {"objects": [f"prime_cpw_{coupler.name}", f"second_cpw_{coupler.name}", f"trace_{cpw.name}", f"readout_connector_arm_{claw.name}"], "MaxLength": '4um'}}
-        add_ground_strip_and_mesh(modeler, coupler, mesh_lengths=mesh_lengths)
+        mesh_lengths = {'mesh1': {"objects": [f"prime_cpw_{coupler.name}", f"second_cpw_{coupler.name}", f"trace_{cpw.name}", f"readout_connector_arm_{claw.name}"], "MaxLength": '7um'}}
+        #add_ground_strip_and_mesh(modeler, coupler, mesh_lengths=mesh_lengths)
+        print(mesh_lengths)
+        mesh_objects(modeler, mesh_lengths)
         f_rough, Q, kappa = get_freq_Q_kappa(epra, hfss)
 
         data = epra.get_data()
@@ -65,7 +67,7 @@ def CLT_epr_sweep(design, sweep_opts, filename):
             "misc": data
         }
         
-        # filename = f"CLT_cpw{cpw.options.total_length}_claw{claw.options.connection_pads.readout.claw_width}_clength{coupler.options.coupling_length}"
+        filename = f"CLT_cpw{cpw.options.total_length}_claw{claw.options.connection_pads.readout.claw_width}_clength{coupler.options.coupling_length}"
         save_simulation_data_to_json(data_df, filename)
 
 def NCap_epr_sweep(design, sweep_opts):    
@@ -202,6 +204,8 @@ def render_simulation_with_ports(epra, ansys_design_name, setup_vars, coupler):
     :param setup_vars: The setup variables for the rendering.
     :param coupler: The coupler object.
     """
+    print(epra.sim)
+    epra.sim.renderer.clean_active_design()
     epra.sim._render(name=ansys_design_name,
                      solution_type='eigenmode',
                      vars_to_initialize=setup_vars,
