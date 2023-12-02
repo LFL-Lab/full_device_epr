@@ -67,7 +67,7 @@ def CLT_epr_sweep(design, sweep_opts, filename):
             "misc": data
         }
         
-        filename = f"CLT_cpw{cpw.options.total_length}_claw{claw.options.connection_pads.readout.claw_width}_clength{coupler.options.coupling_length}"
+        # filename = f"CLT_cpw{cpw.options.total_length}_claw{claw.options.connection_pads.readout.claw_width}_clength{coupler.options.coupling_length}"
         save_simulation_data_to_json(data_df, filename)
 
 def NCap_epr_sweep(design, sweep_opts):    
